@@ -1,13 +1,14 @@
 import React, { useRef, useEffect } from 'react'
 import { useUser } from '../context/userContext'
 import { useChatMapContext } from '../context/ChatMapContext'
-import botImage from '../assets/bot.jpeg' 
+import botImage from '../assets/bot.jpeg'
+import styled from 'styled-components'
 
-export default function MessagesRender() {
+export default function MessagesRender({ loading = false }) {
   const { activeChatId } = useUser()
   const { getMessages } = useChatMapContext()
   const bottomRef = useRef(null)
-  
+
   // Always call hooks by providing a default empty array if there's no active chat.
   const messages = activeChatId ? getMessages(activeChatId) : []
 
@@ -17,35 +18,40 @@ export default function MessagesRender() {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
       }, 100) // Adjust delay as needed
     }
-  }, [messages, activeChatId])
+  }, [messages, loading, activeChatId])
 
-  if (!activeChatId) {
-    return <p className="text-gray-500 italic">Select a chat to begin are create a new chat.</p>
+  if (!activeChatId || messages.length === 0 ) {
+    return (
+      <Styledptag className="text-gray-500 italic flex justify-center items-center h-[250px] flex-col gap-2">
+        No messages yet. Say “hello” to start the conversation 
+        <p>Are upload your PDF and start conservation</p>
+      </Styledptag>
+    )
   }
+
+  
 
   return (
     <div className="space-y-5 p-2.5">
       {messages.map((m, i) => (
         <div
           key={i}
-          className={`flex items-end ${
-            m.sender === 'user' ? 'justify-end' : 'justify-start'
-          }`}
+          className={`flex items-end ${m.sender === 'user' ? 'justify-end' : 'justify-start'
+            }`}
         >
           {m.sender === 'bot' && (
-            <img 
-              src={botImage} 
-              alt="bot" 
-              className="mr-2 w-8 h-8 rounded-full object-cover" 
+            <img
+              src={botImage}
+              alt="bot"
+              className="mr-2 w-8 h-8 rounded-full object-cover"
             />
           )}
 
           <div
-            className={`max-w-[60%] px-4 py-2 rounded-lg ${
-              m.sender === 'user'
+            className={`max-w-[80%] px-4 py-2 rounded-lg ${m.sender === 'user'
                 ? 'bg-blue-500 text-white rounded-br-none'
                 : 'bg-white text-gray-800 rounded-bl-none'
-            }`}
+              }`}
           >
             {m.text}
           </div>
@@ -56,11 +62,24 @@ export default function MessagesRender() {
             </div>
           )}
         </div>
-        
+
       ))}
+      {loading && (
+        <div className="flex items-end justify-start animate-pulse">
+          <div className="mr-2 w-8 h-8 rounded-full bg-gray-300" />
+          <div className="max-w-[80%] h-6 bg-gray-300 rounded-lg" />
+        </div>
+      )}
 
       {/* Attach bottomRef to an element at the bottom */}
       <div ref={bottomRef} />
     </div>
   )
 }
+
+
+const Styledptag = styled.div`
+  display : flex,
+
+`
+

@@ -1,4 +1,6 @@
 backend/.venv/
+backend/chat_service/.env
+backend/ingestion_service/.env
 frontend/node_modules/
 
 

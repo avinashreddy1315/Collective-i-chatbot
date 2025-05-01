@@ -7,6 +7,7 @@ import { useUser } from '../context/userContext'
 import { useNavigate } from 'react-router-dom'
 import MessagesRender from './MessagesRender'
 import SendIcon from '@mui/icons-material/Send'
+import UploadFileIcon from '@mui/icons-material/UploadFile'
 
 export default function ChatWindow({ sidebarCollapsed, toggleSidebar }) {
   const { addSession, addMessage } = useChatMapContext()
@@ -14,6 +15,7 @@ export default function ChatWindow({ sidebarCollapsed, toggleSidebar }) {
   const [messageText, setMessageText] = useState('')
   const { customerName, logout, activeChatId, setActiveChat } = useUser()
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
 
   const openDialog = () => setIsDialogOpen(true)
   const closeDialog = () => setIsDialogOpen(false)
@@ -24,27 +26,99 @@ export default function ChatWindow({ sidebarCollapsed, toggleSidebar }) {
     navigate('/')
   }
 
-  const handleSend = () => {
+  const handleSend = async () => {
     const text = messageText.trim()
     if (!text) return
 
+    // create or select session
     let sessionId = activeChatId
-
-    // If no active session, create one from the first word(s) of the message
     if (!sessionId) {
-      const words = text.split(/\s+/)
-      const title = words.slice(0, 2).join(' ')
+      const title = text.split(/\s+/).slice(0, 2).join(' ')
       sessionId = addSession(title || 'Chat')
       setActiveChat(sessionId)
     }
 
-    // add the user's message
+    // add user message locally
     addMessage(sessionId, { sender: 'user', text })
     setMessageText('')
+    setLoading(true)
 
-    // optionally: trigger bot reply
-    // addMessage(sessionId, { sender: 'bot', text: 'Bot reply here…' })
+
+    // call your FastAPI backend
+    try {
+      const res = await fetch('http://localhost:8000/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text }),
+      })
+
+      const { response } = await res.json()
+      console.log(response);
+      setLoading(false)
+
+      // add the bot’s reply
+      addMessage(sessionId, { sender: 'bot', text: response })
+    } catch (err) {
+      console.error('Chat API error', err)
+      setLoading(false)
+      addMessage(sessionId, {
+        sender: 'bot',
+        text: '🚨 Error contacting chat service.'
+      })
+    }
   }
+
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    console.log("file :-", file);
+  
+    let sessionId = activeChatId
+    if (!sessionId) {
+      sessionId = addSession('File Upload')
+      setActiveChat(sessionId)
+    }
+  
+    // 1️⃣ Show system message & start skeleton
+    addMessage(sessionId, { sender: 'system', text: `Please wait, uploading ${file.name}…` })
+    setLoading(true)
+  
+    const formData = new FormData()
+    formData.append('file', file)
+  
+    try {
+      const res = await fetch('http://localhost:8001/api/upload', {
+        method: 'POST',
+        body: formData
+      })
+      const data = await res.json()
+      console.log("data -", data);
+  
+      if (data.status === 'ingested') {
+        // 2️⃣ Stop skeleton
+        setLoading(false)
+  
+        // 3️⃣ Bot notification
+        addMessage(sessionId, {
+          sender: 'bot',
+          text: `Your file "${data.file}" has been uploaded and ingested (${data.chunks.length} chunks).`
+        })
+      } else {
+        throw new Error('Upload failed')
+      }
+    } catch (err) {
+      console.error(err)
+      // ensure skeleton is hidden
+      setLoading(false)
+      addMessage(sessionId, {
+        sender: 'system',
+        text: `❌ Failed to upload ${file.name}.`
+      })
+    }
+  }
+  
 
   return (
     <>
@@ -104,10 +178,27 @@ export default function ChatWindow({ sidebarCollapsed, toggleSidebar }) {
 
         <MessageBody>
           <ChatMessages>
-            <MessagesRender />
+            <MessagesRender loading={loading} />
           </ChatMessages>
 
-          <div className="flex items-center bg-gray-100 rounded-2xl p-4 w-full max-w-[700px]">
+          <div className="flex items-center bg-gray-100 rounded-2xl p-4 w-full max-w-[700px] space-x-2">
+            {/* 1️⃣ Upload button */}
+            <label
+              htmlFor="file-upload"
+              className="cursor-pointer p-2 bg-gray-800 text-white rounded-full hover:bg-gray-700"
+              title="Upload .pdf or .txt"
+            >
+              <UploadFileIcon fontSize="small" />
+            </label>
+            <input
+              id="file-upload"
+              type="file"
+              accept=".pdf,.txt"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+
+            {/* 2️⃣ Text input */}
             <input
               type="text"
               placeholder="Type a message…"
@@ -116,9 +207,11 @@ export default function ChatWindow({ sidebarCollapsed, toggleSidebar }) {
               onChange={(e) => setMessageText(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             />
+
+            {/* 3️⃣ Send button */}
             <button
               onClick={handleSend}
-              className="ml-2 p-2 bg-gray-800 text-white rounded-full hover:bg-gray-700"
+              className="p-2 bg-gray-800 text-white rounded-full hover:bg-gray-700"
             >
               <SendIcon fontSize="small" />
             </button>
