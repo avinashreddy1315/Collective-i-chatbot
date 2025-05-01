@@ -1,0 +1,6 @@
+# ignore Python virtualenv
+backend/.venv/
+
+# ignore Node-modules
+frontend/node_modules/
+
