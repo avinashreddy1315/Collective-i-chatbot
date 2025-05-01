@@ -1,0 +1,8 @@
+Q: When will I be charged each month?
+A: We bill your saved payment method on the same calendar day each month that you first subscribed. If that day doesn’t exist (e.g., the 31st), billing occurs on the last day of the month.
+
+Q: How can I update my credit card details?
+A: Navigate to Billing → Payment Methods, click “Update Card,” enter the new card information, and click “Save.” All future invoices will use this card.
+
+Q: What is your refund policy?
+A: We offer a full refund if you cancel within 14 days of your initial purchase. For subscription renewals, prorated refunds are available for the unused portion of your term—just contact support.

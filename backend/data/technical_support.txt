@@ -1,0 +1,8 @@
+Q: The app crashes on startup—what should I do?
+A: First, check that you’re on the latest version. If it persists, clear the app cache (Settings → Apps → YourApp → Storage → Clear Cache) and restart. If it still crashes, reinstall the app or contact support with your device model and OS version.
+
+Q: Why is my search returning no results?
+A: Make sure your search terms are spelled correctly and try fewer keywords. Our search engine ignores punctuation—avoid special characters. If you still see no results, the content may not exist or could be under a different category.
+
+Q: I’m seeing “Error 503 Service Unavailable.” How long will it last?
+A: A 503 error means we’re performing maintenance or experiencing heavy traffic. Most outages resolve within 10–15 minutes. Check our status page at status.example.com for real-time updates.

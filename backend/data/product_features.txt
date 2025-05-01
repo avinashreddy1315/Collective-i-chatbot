@@ -1,0 +1,8 @@
+Q: What collaboration tools does your platform include?
+A: You get real-time document co-editing, in-app chat, task assignment boards, and @mentions. All changes sync instantly so your team stays aligned.
+
+Q: Can I integrate with third-party apps?
+A: Yes—navigate to Integrations → App Marketplace to browse and install connectors for Slack, Google Drive, GitHub, and over 50 others. Follow each connector’s setup guide within the marketplace.
+
+Q: How do I generate performance reports?
+A: Go to Analytics → Reports, select the date range and metrics (e.g., task completion rate, user activity), then click “Generate.” You can export as PDF or CSV for offline analysis.
