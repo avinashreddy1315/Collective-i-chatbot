@@ -1,6 +1,40 @@
-backend/.venv/
-backend/chat_service/.env
-backend/ingestion_service/.env
-frontend/node_modules/
+# Python virtual environments
+/backend/.venv/
+/backend/ingestion_service/.venv/
+/backend/chat_service/.venv/
+
+# Python byte-code
+**/__pycache__/
+/**/*.py[cod]
+*.so
+
+# Environment files
+/backend/chat_service/.env
+/backend/ingestion_service/.env
+
+# Chromadb files (if you don’t want to version the vector store)
+/backend/chromadb/
+/backend/chromadb/**/*
+
+# SQLite DBs
+**/*.sqlite3
+
+# Node dependencies & build output
+/frontend/node_modules/
+/frontend/dist/
+/frontend/build/
+
+# Vite cache
+/node_modules/
+/dist/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Logs, test outputs
+*.log
+coverage/
+
 
 

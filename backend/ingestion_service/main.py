@@ -10,7 +10,7 @@ load_dotenv()
 app = FastAPI()
 # DATA_FOLDER is already set to backend/data by rag_ingest
 
-# 1️⃣ Add this CORS configuration:
+# 1Add this CORS configuration:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # or ['*'] for dev

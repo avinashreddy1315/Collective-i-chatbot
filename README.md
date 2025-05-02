@@ -82,21 +82,22 @@ git clone <repository-url>
 ```
 
 ---
-
-#### 2. Setup for `chat_service`
-
+#### 2. Create & activate a Python venv
 ```bash
-cd chat_service
-python -m venv .venv
-source .venv/bin/activate   # macOS/Linux
-# OR
-.venv\Scripts\activate      # Windows
 
-pip install -r requirements.txt
-python main.py
+cd Collective-i-chatbot/backend
+python3 -m venv .venv
+# macOS/Linux
+source .venv/bin/activate
+# Windows (PowerShell)
+.\.venv\Scripts\Activate.ps1
+
+
 ```
 
+
 ---
+
 
 #### 3. Setup for `ingestion_service`
 
@@ -120,6 +121,34 @@ uvicorn ingestion_service.main:app --reload --port 8001
 ```
 
 ---
+
+#### 2. Setup for `chat_service`
+
+```bash
+cd chat_service
+python -m venv .venv
+source .venv/bin/activate   # macOS/Linux
+# OR
+.venv\Scripts\activate      # Windows
+
+# this will install pip into your venv if it’s missing
+python -m ensurepip --upgrade
+
+# then upgrade to the latest pip
+python -m pip install --upgrade pip
+
+python -m pip install -r requirements.txt
+
+#Install Uvicorn (if it isn’t already):
+python -m pip install "uvicorn[standard]"
+
+
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+---
+
+
 
 Now your backend is fully operational with both microservices running independently.
 
