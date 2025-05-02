@@ -20,16 +20,16 @@ export default function MessagesRender({ loading = false }) {
     }
   }, [messages, loading, activeChatId])
 
-  if (!activeChatId || messages.length === 0 ) {
+  if (!activeChatId || messages.length === 0) {
     return (
       <Styledptag className="text-gray-500 italic flex justify-center items-center h-[250px] flex-col gap-2">
-        No messages yet. Say “hello” to start the conversation 
+        No messages yet. Say “hello” to start the conversation
         <p>Are upload your PDF and start conservation</p>
       </Styledptag>
     )
   }
 
-  
+
 
   return (
     <div className="space-y-5 p-2.5">
@@ -48,9 +48,9 @@ export default function MessagesRender({ loading = false }) {
           )}
 
           <div
-            className={`max-w-[80%] px-4 py-2 rounded-lg ${m.sender === 'user'
+            className={`max-w-[80%] sm:max-w-[90%] w-fit px-4 py-2 rounded-lg break-words ${m.sender === 'user'
                 ? 'bg-blue-500 text-white rounded-br-none'
-                : 'bg-white text-gray-800 rounded-bl-none'
+                : 'bg-gray-100 text-gray-800 rounded-bl-none'
               }`}
           >
             {m.text}
@@ -79,7 +79,16 @@ export default function MessagesRender({ loading = false }) {
 
 
 const Styledptag = styled.div`
-  display : flex,
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #6b7280; /* Tailwind's text-gray-500 */
+  font-style: italic;
+  height: 250px;
+  justify-content: center;
+  gap: 0.5rem;
+  text-align: center;
+  padding: 1rem;
 `
+
 

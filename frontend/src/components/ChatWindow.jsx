@@ -181,7 +181,7 @@ export default function ChatWindow({ sidebarCollapsed, toggleSidebar }) {
             <MessagesRender loading={loading} />
           </ChatMessages>
 
-          <div className="flex items-center bg-gray-100 rounded-2xl p-4 w-full max-w-[700px] space-x-2">
+          <div className="flex items-center bg-gray-100 rounded-2xl p-4 w-full max-w-[700px] space-x-2 px-2 sm:px-4">
             {/* 1️⃣ Upload button */}
             <label
               htmlFor="file-upload"
@@ -246,20 +246,32 @@ const MessageBody = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;       /* center horizontally */
+  align-items: center;
   padding-bottom: 2rem;
-  justify-content: space-between
+  justify-content: space-between;
+
+  @media (max-width: 1000px) {
+    padding: 1rem;
+  }
 `
 
 const ChatMessages = styled.div`
   width: 700px;
   max-width: 100%;
-  height: calc(100vh - 200px);             /* fixed height */
-  overflow-y: auto;         /* scrollable */
+  height: calc(100vh - 200px);
+  overflow-y: auto;
   margin-bottom: 1rem;
-  
 
   &::-webkit-scrollbar {
     display: none;
   }
+
+  
+
+  @media (max-width: 1000px) {
+    width: 100%;
+    height: calc(100vh - 240px);  /* slightly more spacing for smaller screens */
+  }
+
+  
 `
